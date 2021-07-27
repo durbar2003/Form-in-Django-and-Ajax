@@ -1,0 +1,32 @@
+{% load crispy_forms_tags %}
+<h1>Contact</h1>
+<form method="POST" id="form">
+    {% csrf_token %}
+    <ul>
+        {{ form.as_ul }}
+    </ul>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+<script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+<script>
+    const form=document.getElementById('form');
+    form.addEventListener("submit", submitHandler);
+
+    function submitHandler(e) {
+        e.preventDefault();
+        $.ajax({
+            type        : 'POST', 
+            url         : '{% url 'contact' %}',
+            data        : $('#form').serialize(), 
+            dataType    : 'json', 
+            success     : successFunction
+        });
+    }
+
+    function successFunction(msg) {
+        if (msg.message === 'success') {
+            alert('Success!');
+            form.reset()
+        }
+    }
+</script>
